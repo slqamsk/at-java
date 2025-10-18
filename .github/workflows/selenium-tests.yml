@@ -15,37 +15,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Шаг 1: Получение кода
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Шаг 2: Даем права на выполнение gradlew
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      # Шаг 3: Установка Java
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
 
-      # Шаг 4: Запуск тестов
       - name: Run tests
         run: ./gradlew clean test
 
-      # Шаг 5: Установка Allure через Action
-      - name: Install Allure
+      # Все действия с Allure в одном шаге
+      - name: Allure Report
         uses: simple-elf/allure-report-action@v1.7
-
-      # Шаг 6: Генерация отчета
-      - name: Generate Allure Report
-        run: |
-          /home/runner/allure/bin/allure generate build/allure-results -o allure-report --clean
-
-      # Шаг 7: Деплой на GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./allure-report
+          # Путь к результатам тестов
+          allure_results: "build/allure-results"
+
+          # Папка для сгенерированного отчета
+          allure_report: "allure-report"
+
+          # Публиковать на GitHub Pages
+          gh_pages: "true"
+
+          # Подпапка на GitHub Pages (оставить пустым для корня)
+          subfolder: ""
+
+          # Сколько отчетов хранить в истории
+          keep_reports: "10"
+
+          # URL для отчета (автоматически определится)
+          report_url: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
