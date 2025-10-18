@@ -28,26 +28,15 @@ jobs:
           distribution: 'temurin'
 
       - name: Run tests
-        run: ./gradlew clean test
+        run: ./gradlew clean test -Dselenide.headless=true
 
       # Все действия с Allure в одном шаге
       - name: Allure Report
         uses: simple-elf/allure-report-action@v1.7
         with:
-          # Путь к результатам тестов
           allure_results: "build/allure-results"
-
-          # Папка для сгенерированного отчета
           allure_report: "allure-report"
-
-          # Публиковать на GitHub Pages
           gh_pages: "true"
-
-          # Подпапка на GitHub Pages (оставить пустым для корня)
           subfolder: ""
-
-          # Сколько отчетов хранить в истории
           keep_reports: "10"
-
-          # URL для отчета (автоматически определится)
           report_url: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"

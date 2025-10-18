@@ -13,7 +13,6 @@ public class WikipediaTest {
     @BeforeAll
     static void beforeAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
-        Configuration.headless = true;
     }
 
     @Test
