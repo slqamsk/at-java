@@ -34,15 +34,14 @@ jobs:
       - name: Run tests
         run: ./gradlew clean test
 
-      # Шаг 5: Установка Allure
+      # Шаг 5: Установка Allure через Action
       - name: Install Allure
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y allure
+        uses: simple-elf/allure-report-action@v1.7
 
-      # Шаг 6: Генерация Allure отчета
+      # Шаг 6: Генерация отчета
       - name: Generate Allure Report
-        run: allure generate build/allure-results -o allure-report --clean
+        run: |
+          /home/runner/allure/bin/allure generate build/allure-results -o allure-report --clean
 
       # Шаг 7: Деплой на GitHub Pages
       - name: Deploy to GitHub Pages
