@@ -4,21 +4,19 @@ plugins {
 }
 
 sourceCompatibility = 21
-targetCompatibility = 21
 
 allure {
-    report {
-        version.set("2.29.0")
-    }
-    adapter { // отвечает за появление папочки build/allure-results
-        aspectjWeaver.set(true) //обработка аннотации @Step
+    version.set("2.29.0")
+    adapter {
+        aspectjWeaver.set(true)
         frameworks {
-            junit5 { //название фреймворка
-                adapterVersion.set("2.29.0") //версия интеграции фреймворка и Allure
+            junit5 {
+                adapterVersion.set("2.29.0")
             }
         }
     }
 }
+
 repositories {
     mavenCentral()
 }
@@ -27,24 +25,24 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
     testImplementation 'com.codeborne:selenide:7.7.3'
     testImplementation 'io.qameta.allure:allure-selenide:2.29.0'
-    testImplementation "org.slf4j:slf4j-simple:2.0.12"
+    testImplementation 'org.slf4j:slf4j-simple:2.0.12'
 }
 
-tasks.withType(JavaCompile).configureEach {
+tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
+
 test {
     useJUnitPlatform()
     systemProperties(System.getProperties())
 
-    // Настройки для Selenide
-    systemProperty "selenide.browser", "chrome"
-    systemProperty "selenide.headless", System.getProperty("selenide.headless", "false")
-    systemProperty "selenide.remote", System.getProperty("selenide.remote", "")
+    systemProperties = [
+            "selenide.browser": "chrome",
+            "selenide.headless": System.getProperty("selenide.headless", "false")
+    ]
 
     testLogging {
         events "passed", "skipped", "failed"
-        exceptionFormat "full"
         showStandardStreams = true
     }
 }
