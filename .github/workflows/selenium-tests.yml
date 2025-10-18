@@ -32,7 +32,7 @@ jobs:
 
       # Шаг 4: Запуск тестов
       - name: Run tests
-        run: ./gradlew clean test
+        run: ./gradlew clean test -Dselenide.headless=true -Dchromeoptions.args='--no-sandbox,--disable-dev-shm-usage,--remote-debugging-port=9222'
 
       # Шаг 5: Установка Allure
       - name: Install Allure
