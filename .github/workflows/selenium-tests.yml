@@ -1,17 +1,14 @@
 name: CI Autotests Run
 
-#Триггеры для запуска
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:  # Добавляем ручной запуск
+  workflow_dispatch:
 
-#Разрешения для работы
 permissions:
   id-token: write
   pages: write
 
-#Задания
 jobs:
   run-autotests:
     name: Run Tests and Deploy Report
@@ -22,28 +19,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Шаг 2: Установка Java
+      # Шаг 2: Даем права на выполнение gradlew
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      # Шаг 3: Установка Java
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
 
-      # Шаг 3: Запуск тестов
+      # Шаг 4: Запуск тестов
       - name: Run tests
         run: ./gradlew clean test
 
-      # Шаг 4: Установка Allure
+      # Шаг 5: Установка Allure
       - name: Install Allure
         run: |
           sudo apt-get update
           sudo apt-get install -y allure
 
-      # Шаг 5: Генерация Allure отчета
+      # Шаг 6: Генерация Allure отчета
       - name: Generate Allure Report
         run: allure generate build/allure-results -o allure-report --clean
 
-      # Шаг 6: Деплой на GitHub Pages
+      # Шаг 7: Деплой на GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
