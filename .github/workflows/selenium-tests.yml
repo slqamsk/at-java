@@ -32,7 +32,7 @@ jobs:
 
       # Все действия с Allure в одном шаге
       - name: Allure Report
-        uses: simple-elf/allure-report-action@v1.7
+        uses: simple-elf/allure-report-action@v2
         with:
           allure_results: "build/allure-results"
           allure_report: "allure-report"
